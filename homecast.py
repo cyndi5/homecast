@@ -240,7 +240,7 @@ def stop_button_clicked():
 
 
 stop_button = Button(top, text="Stop", command=stop_button_clicked, highlightbackground="DarkOliveGreen1")
-stop_button.pack(side=LEFT)
+stop_button.pack(side=LEFT, expand=1)
 
 
 def disconnect_button_clicked():
