@@ -95,8 +95,7 @@ class Player:
         self.chromecasts = None
         self.device_names = []
         self.chosen_device_name = ""
-        self.media_url = "https://storage.googleapis.com/hafnium/video/Real%20McCoy%20-%20Another%20Night%20(" \
-                         "Official%20Video)-opt.mp4"
+        self.media_url = ""
         self.media_mime_type = "video/mp4"
         self.chosen_device = None
         self.media_controller = None
