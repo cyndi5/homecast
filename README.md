@@ -1,6 +1,7 @@
 # Project Title
 
 ChromeCast Player (HomeCast)
+by Cynthia (Charles) Cavanaugh, Ph.D.
 
 ## Description
 
