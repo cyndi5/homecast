@@ -145,7 +145,41 @@ class Player:
     def disconnect(self):
         self.chosen_device.quit_app()
 
+    def test_speech(self):
+        self.media_controller.play_media()
 
+def synthesize_text_with_audio_profile(text):
+    """Synthesizes speech from the input string of text."""
+    from google.cloud import texttospeech
+
+    client = texttospeech.TextToSpeechClient()
+
+    input_text = texttospeech.types.SynthesisInput(text=text)
+
+    # Note: the voice can also be specified by name.
+    # Names of voices can be retrieved with client.list_voices().
+    voice = texttospeech.types.VoiceSelectionParams(language_code='en-US')
+
+    # Note: you can pass in multiple effects_profile_id. They will be applied
+    # in the same order they are provided.
+    audio_config = texttospeech.types.AudioConfig(
+        audio_encoding=texttospeech.enums.AudioEncoding.MP3,
+        effects_profile_id=['handset-class-device'])
+
+    response = client.synthesize_speech(input_text, voice, audio_config)
+
+    # The response's audio_content is binary.
+    speech_data_filename = 'speech_data.mp3'
+    with open(speech_data_filename, 'wb') as speech_data:
+        pickle.dump(response.audio_content, speech_data)
+        print('Audio content written to file "%s"' % speech_data_filename)
+
+    if os.path.exists(speech_data_filename):
+        with open(speech_data_filename, 'rb') as speech_data:
+            my_speech_data = pickle.load(speech_data)
+
+
+synthesize_text_with_audio_profile("Hello.")
 top = Tk()
 top.configure(background="floral white")
 top.title("HomeCast")
@@ -181,7 +215,8 @@ def choose_file_button_clicked():
     mime_type_entry.insert(0, player.get_media_mime_type())
 
 
-choose_file_button = Button(top, text="Choose File", command=choose_file_button_clicked, highlightbackground="CadetBlue1")
+choose_file_button = Button(top, text="Choose File", command=choose_file_button_clicked,
+                            highlightbackground="CadetBlue1")
 choose_file_button.pack(fill=BOTH, expand=1)
 player.retrieve_all_chromecasts_and_set_device_names()
 device_listbox = Listbox(top, background="lavender")
@@ -202,7 +237,8 @@ def choose_device_button_clicked():
     chosen_device_label.config(text=player.get_chosen_device_name())
 
 
-choose_device_button = Button(top, text="Choose Device", command=choose_device_button_clicked, highlightbackground="light goldenrod")
+choose_device_button = Button(top, text="Choose Device", command=choose_device_button_clicked,
+                              highlightbackground="light goldenrod")
 choose_device_button.pack(fill=BOTH, expand=1)
 
 
@@ -214,7 +250,8 @@ def play_media_button_clicked():
     player.play_media()
 
 
-play_media_button = Button(top, text="Play Media", command=play_media_button_clicked, highlightbackground="LavenderBlush2")
+play_media_button = Button(top, text="Play Media", command=play_media_button_clicked,
+                           highlightbackground="LavenderBlush2")
 play_media_button.pack(side=LEFT, expand=1)
 
 
@@ -248,4 +285,11 @@ def disconnect_button_clicked():
 
 disconnect_button = Button(top, text="Disconnect", command=disconnect_button_clicked, highlightbackground="plum1")
 disconnect_button.pack(side=LEFT, expand=1)
+
+def test_speech_button_clicked():
+    print("To be done...")
+
+
+test_speech_button = Button(top, text="Test Speech", command=test_speech_button_clicked, highlightbackground="plum1")
+test_speech_button.pack(side=LEFT, expand=1)
 top.mainloop()

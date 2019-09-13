@@ -1,5 +1,7 @@
 token.pickle
+speech_data.*
 .idea
 client_secrets
+credentials
 venv
 *.mp4
